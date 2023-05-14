@@ -21,6 +21,7 @@ export async function requestImageSauce(
   const filtered = results
     .filter((result) => Number(result.header.similarity) > minSimilarity)
     .map((result) => result.data.source || result.data.ext_urls[0])
+    .filter((url) => !url.startsWith('https://i.pximg.net/'))
 
   return filtered
 }
