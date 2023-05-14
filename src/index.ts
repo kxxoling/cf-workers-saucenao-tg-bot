@@ -1,7 +1,7 @@
 import { webhookCallback } from 'grammy/web'
 import bot, { getFileURL } from './bot'
 import { requestImageSauce } from './saucenao'
-import { parseArgsFromCaption } from './utils'
+import { parseArgsFromCaption, sortURLsByPrefer } from './utils'
 
 bot.command('start', async (ctx) => {
   await ctx.reply('hello, world!')
@@ -36,9 +36,11 @@ bot.on('message', async (ctx) => {
     if (results.length === 0) {
       await ctx.reply(`No result matches minSimilarity ${minSimilarity} found.`)
     }
-    results.slice(0, limit).forEach(async (result) => {
-      await ctx.reply(result)
-    })
+    sortURLsByPrefer(results)
+      .slice(0, limit)
+      .forEach(async (result) => {
+        await ctx.reply(result)
+      })
   } catch (e) {
     if (e instanceof Error) {
       await ctx.reply('Error: ' + e + e.stack)

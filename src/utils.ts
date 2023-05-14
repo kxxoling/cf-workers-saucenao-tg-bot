@@ -12,3 +12,15 @@ export function parseArgsFromCaption(caption?: string) {
 
   return { limit, minSimilarity }
 }
+
+export function sortURLsByPrefer(
+  urls: string[],
+  prefer = ['seiga', 'pixiv', 'twitter']
+) {
+  const sorted = urls.sort((a, b) => {
+    const aIndex = prefer.findIndex((p) => a.includes(p))
+    const bIndex = prefer.findIndex((p) => b.includes(p))
+    return bIndex - aIndex
+  })
+  return sorted
+}
