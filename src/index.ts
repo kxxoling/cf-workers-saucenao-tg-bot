@@ -1,7 +1,7 @@
 import { webhookCallback } from 'grammy/web'
 import bot, { getFileURL } from './bot'
 import { requestImageSauce } from './saucenao'
-import { parseArgsFromCaption, sortURLsByPrefer } from './utils'
+import { parseArgsFromCaption, redirectPixivURL, sortURLsByPrefer } from './utils'
 
 bot.command('start', async (ctx) => {
   await ctx.reply('hello, world!')
@@ -38,6 +38,7 @@ bot.on('message', async (ctx) => {
     }
     sortURLsByPrefer(results)
       .slice(0, limit)
+      .map(redirectPixivURL)
       .forEach(async (result) => {
         await ctx.reply(result)
       })

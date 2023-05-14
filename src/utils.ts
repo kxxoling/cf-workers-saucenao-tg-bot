@@ -24,3 +24,14 @@ export function sortURLsByPrefer(
   })
   return sorted
 }
+
+const RE_LEGACY_PIXIV =
+  /^https?:\/\/www\.pixiv\.net\/member_illust\.php\?mode=medium&illust_id=(\d+)/
+
+export function redirectPixivURL(url: string) {
+  const pixivId = RE_LEGACY_PIXIV.exec(url)?.[1]
+  if (pixivId) {
+    return `https://www.pixiv.net/artworks/${pixivId}`
+  }
+  return url
+}
