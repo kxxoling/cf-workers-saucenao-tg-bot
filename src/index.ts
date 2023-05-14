@@ -1,7 +1,11 @@
 import { webhookCallback } from 'grammy/web'
 import bot, { getFileURL } from './bot'
 import { requestImageSauce } from './saucenao'
-import { parseArgsFromCaption, redirectPixivURL, sortURLsByPrefer } from './utils'
+import {
+  parseArgsFromCaption,
+  redirectPixivURL,
+  sortURLsByPrefer,
+} from './utils'
 
 bot.command('start', async (ctx) => {
   await ctx.reply('hello, world!')
@@ -47,12 +51,6 @@ bot.on('message', async (ctx) => {
       await ctx.reply('Error: ' + e + e.stack)
     }
   }
-})
-
-bot.on(':photo', async (photo) => {
-  console.log('photo: ', photo, photo)
-  const keys = Object.keys(photo)
-  console.log('keys: ', keys)
 })
 
 addEventListener('fetch', webhookCallback(bot, 'cloudflare'))
