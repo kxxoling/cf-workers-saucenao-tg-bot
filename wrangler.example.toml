@@ -1,8 +1,8 @@
-name = YOUR_PREFERRED_WORKER_NAME
+name = "YOUR_PREFERRED_WORKER_NAME"
 main = "src/index.ts"
 compatibility_date = "2023-05-09"
 node_compat = true
 
 [vars]
-BOT_NAME = YOUR_BOT_NAME
+BOT_NAME = "YOUR_BOT_NAME"
 NODE_VERSION = 18
