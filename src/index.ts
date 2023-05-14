@@ -1,6 +1,7 @@
 import { webhookCallback } from 'grammy/web'
 import bot, { getFileURL } from './bot'
 import { requestImageSauce } from './saucenao'
+import { parseArgsFromCaption } from './utils'
 
 bot.command('start', async (ctx) => {
   await ctx.reply('hello, world!')
@@ -14,25 +15,30 @@ bot.on('message', async (ctx) => {
       await ctx.reply(
         'I can only understand commands. Send me command or image to continue.'
       )
-    } else {
-      const photo = ctx.msg.photo
-
-      const file = await ctx.getFile()
-      const path = file.file_path
-
-      if (!file.file_path) {
-        await ctx.reply('No path found')
-      } else {
-        // FIXME: may leak token
-        const results = await requestImageSauce(getFileURL(bot, file.file_path))
-        if (results.length === 0) {
-          await ctx.reply('No result matches minSimilarity 70')
-        }
-        results.forEach(async (result) => {
-          await ctx.reply(result)
-        })
-      }
+      return
     }
+
+    const caption = ctx.message.caption
+    const { limit, minSimilarity } = parseArgsFromCaption(caption)
+
+    const file = await ctx.getFile()
+
+    if (!file.file_path) {
+      await ctx.reply('No path found')
+      return
+    }
+
+    // FIXME: may leak token
+    const results = await requestImageSauce(
+      getFileURL(bot, file.file_path),
+      minSimilarity
+    )
+    if (results.length === 0) {
+      await ctx.reply(`No result matches minSimilarity ${minSimilarity} found.`)
+    }
+    results.slice(0, limit).forEach(async (result) => {
+      await ctx.reply(result)
+    })
   } catch (e) {
     if (e instanceof Error) {
       await ctx.reply('Error: ' + e + e.stack)
