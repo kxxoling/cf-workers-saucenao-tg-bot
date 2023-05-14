@@ -40,12 +40,13 @@ bot.on('message', async (ctx) => {
     if (results.length === 0) {
       await ctx.reply(`No result matches minSimilarity ${minSimilarity} found.`)
     }
-    sortURLsByPrefer(results)
+
+    const sortedResults = sortURLsByPrefer(results)
       .slice(0, limit)
       .map(redirectPixivURL)
-      .forEach(async (result) => {
-        await ctx.reply(result)
-      })
+    for (let result of sortedResults) {
+      await ctx.reply(result)
+    }
   } catch (e) {
     if (e instanceof Error) {
       await ctx.reply('Error: ' + e + e.stack)
