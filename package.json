@@ -15,7 +15,6 @@
     "test": "vitest"
   },
   "dependencies": {
-    "grammy": "^1.41.1",
-    "sagiri": "^4.3.0"
+    "grammy": "^1.41.1"
   }
 }
